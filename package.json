@@ -1,5 +1,5 @@
 {
-  "name": "ubiquibot-config-dev",
+  "name": "ubiquibot-config",
   "version": "1.0.0",
   "description": "Configuration helpers for Ubiquibot.",
   "main": "src/index.ts",
