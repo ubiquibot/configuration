@@ -10,3 +10,5 @@ static/dist
 .env
 
 *.tgz
+coverage
+coverage.txt
