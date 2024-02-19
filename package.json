@@ -1,6 +1,7 @@
 {
   "name": "@ubiquibot/configuration",
   "version": "1.0.0",
+  "private": false,
   "description": "Configuration helpers for Ubiquibot.",
   "main": "src/index.ts",
   "author": "Ubiquity DAO",

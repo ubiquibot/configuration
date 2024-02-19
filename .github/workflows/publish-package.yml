@@ -1,4 +1,4 @@
-name: public-package
+name: publish-package
 
 on:
   workflow_dispatch:
@@ -13,16 +13,16 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
-          package-name: ubiquibot-config
+          package-name: @ubiquity/ubiquibot-config
           default-branch: main
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: '20.10.0'
           registry-url: https://registry.npmjs.org/
       - run: |
           yarn install --immutable --immutable-cache --check-cache
           yarn pack
-          yarn publish
+          yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
