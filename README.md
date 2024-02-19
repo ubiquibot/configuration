@@ -1,8 +1,3 @@
-# `@ubiquity/ts-template`
+# `@ubiquibot/configuration`
 
-This template repository includes support for the following:
-
-- TypeScript
-- Environment Variables
-- Conventional Commits
-- Automatic deployment to Cloudflare Pages
+Helpers to parse and merge configuration files for Ubiquibot.
