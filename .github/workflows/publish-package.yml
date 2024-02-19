@@ -13,7 +13,7 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
-          package-name: @ubiquity/ubiquibot-config
+          package-name: @ubiquibot/configuration
           default-branch: main
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
