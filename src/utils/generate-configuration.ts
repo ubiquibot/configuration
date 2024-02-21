@@ -2,10 +2,11 @@ import { Value } from "@sinclair/typebox/value";
 import { DefinedError } from "ajv";
 import * as fs from "fs/promises";
 import mergeWith from "lodash/merge";
+import path from "node:path";
 import YAML from "yaml";
 import { BotConfig, stringDuration, validateBotConfig } from "../types/configuration-types";
 
-const UBIQUIBOT_CONFIG_FULL_PATH = "../../.github/ubiquibot-config.yml";
+const UBIQUIBOT_CONFIG_FULL_PATH = path.join(__dirname, "../../.github/ubiquibot-config.yml");
 
 export async function generateConfiguration(repoConfig?: BotConfig): Promise<BotConfig> {
   const orgConfig = parseYaml(await fs.readFile(UBIQUIBOT_CONFIG_FULL_PATH, { encoding: "utf-8" }));
