@@ -12,6 +12,7 @@ env:
 jobs:
   testing:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/setup-node@v4
         with:
