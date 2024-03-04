@@ -1,8 +1,7 @@
 import { ObjectOptions, Static, StaticDecode, StringOptions, TProperties, Type as T } from "@sinclair/typebox";
 import ms from "ms";
-import { LogLevel } from "ubiquibot-logger/pretty-logs";
 
-import { ajv } from "../utils/ajv";
+import { ajv } from "../utils";
 import { validHTMLElements } from "./valid-html-elements";
 
 const promotionComment =
@@ -19,6 +18,14 @@ const allHtmlElementsSetToZero = validHTMLElements.reduce(
   },
   {} as Record<keyof HTMLElementTagNameMap, number>
 );
+
+export enum LogLevel {
+  FATAL = "fatal",
+  ERROR = "error",
+  INFO = "info",
+  VERBOSE = "verbose",
+  DEBUG = "debug",
+}
 
 const allCommands = ["start", "stop", "help", "query", "ask", "multiplier", "labels", "authorize", "wallet"] as const;
 

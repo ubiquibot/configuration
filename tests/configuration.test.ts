@@ -19,15 +19,15 @@ describe("Configuration generation", () => {
   });
 
   test("Generate configuration", async () => {
-    const cfg = await generateConfiguration();
+    const cfg = generateConfiguration();
     expect(cfg).toStrictEqual(validConfig);
     await expect(async () => {
-      await generateConfiguration({ keys: ["123"] } as unknown as BotConfig);
+      generateConfiguration({ keys: ["123"] } as unknown as BotConfig);
     }).rejects.toThrow();
   });
 
   test("Transform configuration", async () => {
-    const cfg = await generateConfiguration();
+    const cfg = generateConfiguration();
     expect(() => {
       transformConfig(cfg);
     }).toThrow();

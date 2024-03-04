@@ -1,16 +1,12 @@
 import { Value } from "@sinclair/typebox/value";
 import { DefinedError } from "ajv";
-import * as fs from "fs/promises";
 import mergeWith from "lodash/merge";
-import path from "node:path";
 import YAML from "yaml";
-import { BotConfig, stringDuration, validateBotConfig } from "../types/configuration-types";
+import { BotConfig, stringDuration, validateBotConfig } from "../types";
+// @ts-expect-error gets transformed by esbuild
+import orgConfig from "../../.github/ubiquibot-config.yml";
 
-const UBIQUIBOT_CONFIG_FULL_PATH = path.join(__dirname, "../../.github/ubiquibot-config.yml");
-
-export async function generateConfiguration(repoConfig?: BotConfig): Promise<BotConfig> {
-  const orgConfig = parseYaml(await fs.readFile(UBIQUIBOT_CONFIG_FULL_PATH, { encoding: "utf-8" }));
-
+export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
   const merged = mergeWith({}, orgConfig, repoConfig, (objValue: unknown, srcValue: unknown) => {
     if (Array.isArray(objValue) && Array.isArray(srcValue)) {
       // if it's string array, concat and remove duplicates
