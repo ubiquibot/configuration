@@ -8,4 +8,8 @@ module.exports = {
   coverageReporters: ["json", "lcov", "text", "clover", "json-summary"],
   reporters: ["default", "jest-junit"],
   coverageDirectory: "coverage",
+  transform: {
+    "\\.yml$": "jest-transform-yaml",
+  },
+  moduleFileExtensions: ["yml", "ts", "js"],
 };
