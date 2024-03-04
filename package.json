@@ -1,9 +1,8 @@
 {
   "name": "@ubiquibot/configuration",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "private": false,
   "description": "Configuration helpers for Ubiquibot.",
-  "main": "src/index.ts",
   "author": "Ubiquity DAO",
   "license": "MIT",
   "engines": {
@@ -24,6 +23,7 @@
     "template",
     "dao",
     "ubiquity",
+    "ubiquibot",
     "open-source"
   ],
   "dependencies": {
@@ -33,8 +33,9 @@
     "dotenv": "16.4.4",
     "lodash": "4.17.21",
     "ms": "2.1.3",
-    "ubiquibot-logger": "0.3.5"
+    "ubiquibot-logger": "^0.3.5"
   },
+  "peerDependencies": {},
   "devDependencies": {
     "@commitlint/cli": "18.6.1",
     "@commitlint/config-conventional": "18.6.2",
@@ -49,6 +50,7 @@
     "@typescript-eslint/parser": "7.0.1",
     "cspell": "8.3.2",
     "esbuild": "0.20.0",
+    "esbuild-plugin-yaml": "0.0.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.3",
@@ -58,6 +60,7 @@
     "jest-junit": "16.0.0",
     "knip": "5.0.1",
     "lint-staged": "15.2.2",
+    "npm-dts": "^1.3.12",
     "npm-run-all": "4.1.5",
     "prettier": "3.2.5",
     "ts-jest": "29.1.2",
@@ -79,8 +82,11 @@
     ]
   },
   "files": [
-    "src/*",
+    "dist/*",
     "README.md",
     "package.json"
-  ]
+  ],
+  "module": "dist/index.esm.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts"
 }
