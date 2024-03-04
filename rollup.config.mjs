@@ -12,10 +12,5 @@ export default {
     dir: "dist",
     format: "cjs",
   },
-  plugins: [nodeResolve(), commonjs(), typescript({
-    exclude: ["**/tests", "**/*.test.ts"],
-    tsconfigOverride: {
-      exclude: ["**/tests", "**/*.test.ts"]
-    }
-  }), yaml(), json(), generateDtsBundle(), terser()],
+  plugins: [nodeResolve(), commonjs(), typescript(), yaml(), json(), generateDtsBundle(), terser()],
 };
