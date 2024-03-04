@@ -6,7 +6,7 @@
   },
   "plugins": ["@typescript-eslint", "sonarjs"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:sonarjs/recommended"],
-  "ignorePatterns": ["**/*.js"],
+  "ignorePatterns": ["**/*.js", "**/tests/*", "dist/**"],
   "rules": {
     "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }],
     "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],

@@ -3,7 +3,7 @@ import { DefinedError } from "ajv";
 import mergeWith from "lodash/merge";
 import YAML from "yaml";
 import { BotConfig, stringDuration, validateBotConfig } from "../types";
-// @ts-expect-error gets transformed by esbuild
+// @ts-expect-error gets transformed by rollup
 import orgConfig from "../../.github/ubiquibot-config.yml";
 
 export function generateConfiguration(repoConfig?: BotConfig): BotConfig {

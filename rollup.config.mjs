@@ -4,6 +4,7 @@ import { generateDtsBundle } from "rollup-plugin-dts-bundle-generator";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
+import terser from "@rollup/plugin-terser";
 
 export default {
   input: "src/index.ts",
@@ -11,5 +12,10 @@ export default {
     dir: "dist",
     format: "cjs",
   },
-  plugins: [nodeResolve(), commonjs(), typescript(), yaml(), json(), generateDtsBundle()],
+  plugins: [nodeResolve(), commonjs(), typescript({
+    exclude: ["**/tests", "**/*.test.ts"],
+    tsconfigOverride: {
+      exclude: ["**/tests", "**/*.test.ts"]
+    }
+  }), yaml(), json(), generateDtsBundle(), terser()],
 };
