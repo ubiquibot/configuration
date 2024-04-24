@@ -2,22 +2,17 @@ import { ObjectOptions, Static, StaticDecode, StringOptions, TProperties, Type a
 import ms from "ms";
 
 import { ajv } from "../utils";
-import { validHTMLElements } from "./valid-html-elements";
+import contentEvaluatorConfigurationType from "./configuration/content-evaluator-config";
+import dataPurgeConfigurationType from "./configuration/data-purge-config";
+import formattingEvaluatorConfigurationType from "./configuration/formatting-evaluator-config";
+import githubCommentConfigurationType from "./configuration/github-comment-config";
+import permitGenerationConfigurationType from "./configuration/permit-generation-configuration";
+import userExtractorConfigurationType from "./configuration/user-extractor-config";
 
 const promotionComment =
   "###### If you enjoy the DevPool experience, please follow [Ubiquity on GitHub](https://github.com/ubiquity) and star [this repo](https://github.com/ubiquity/devpool-directory) to show your support. It helps a lot!";
 const defaultGreetingHeader =
   "Thank you for contributing! Please be sure to set your wallet address before completing your first task so that you can collect your reward.";
-
-const htmlEntities = validHTMLElements.map((value) => T.Literal(value));
-
-const allHtmlElementsSetToZero = validHTMLElements.reduce(
-  (accumulator, current) => {
-    accumulator[current] = 0;
-    return accumulator;
-  },
-  {} as Record<keyof HTMLElementTagNameMap, number>
-);
 
 export enum LogLevel {
   FATAL = "fatal",
@@ -83,7 +78,6 @@ const botConfigSchema = strictObject(
       }),
       isNftRewardEnabled: T.Boolean({ default: false }),
     }),
-
     timers: strictObject({
       reviewDelayTolerance: stringDuration({ default: "1 day" }),
       taskStaleTimeoutDuration: stringDuration({ default: "4 weeks" }),
@@ -98,16 +92,13 @@ const botConfigSchema = strictObject(
     }),
     disabledCommands: T.Array(T.String(), { default: allCommands }),
     incentives: strictObject({
-      comment: strictObject({
-        elements: T.Record(T.Union(htmlEntities), T.Number({ default: 0 }), { default: allHtmlElementsSetToZero }),
-        totals: strictObject({
-          character: T.Number({ default: 0, minimum: 0 }),
-          word: T.Number({ default: 0, minimum: 0 }),
-          sentence: T.Number({ default: 0, minimum: 0 }),
-          paragraph: T.Number({ default: 0, minimum: 0 }),
-          comment: T.Number({ default: 0, minimum: 0 }),
-        }),
-      }),
+      enabled: T.Boolean({ default: true }),
+      contentEvaluator: contentEvaluatorConfigurationType,
+      userExtractor: userExtractorConfigurationType,
+      dataPurge: dataPurgeConfigurationType,
+      formattingEvaluator: formattingEvaluatorConfigurationType,
+      permitGeneration: permitGenerationConfigurationType,
+      githubComment: githubCommentConfigurationType,
     }),
     labels: strictObject({
       time: T.Array(T.String(), { default: defaultTimeLabels }),

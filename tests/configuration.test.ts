@@ -2,12 +2,13 @@ import * as fs from "fs";
 import path from "node:path";
 import { BotConfig, generateConfiguration, parseYaml, transformConfig } from "../src";
 import validConfig from "./__mocks__/test-valid-conf-obj";
+import defaultConfig from "./__mocks__/test-default-conf-obj";
 
-const filePath = path.join(__dirname, "./__mocks__/test-valid-config.yml");
+const defaultConfigFilePath = path.join(__dirname, "../.github/ubiquibot-config.yml");
 
 describe("Configuration generation", () => {
   test("Parse Yaml file", () => {
-    const fileContent = fs.readFileSync(filePath, { encoding: "utf8" });
+    const fileContent = fs.readFileSync(defaultConfigFilePath, { encoding: "utf8" });
     const parsed = parseYaml(fileContent);
     // Silences the error output since it is expected to have errors logged
     const spy = jest.spyOn(console, "error").mockImplementation(jest.fn());
@@ -15,10 +16,7 @@ describe("Configuration generation", () => {
     spy.mockClear();
     const parseEmpty = parseYaml(null);
     expect(parseEmpty).toBeNull();
-    expect(parsed).toStrictEqual({
-      "price-multiplier": 1.5,
-      "command-settings": [{ name: "start", enabled: false }],
-    });
+    expect(parsed).toStrictEqual(defaultConfig);
   });
 
   test("Generate configuration", async () => {
