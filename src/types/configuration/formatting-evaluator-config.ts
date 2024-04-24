@@ -3,7 +3,7 @@ import { CommentType } from "./comment-types";
 
 const type = Type.Union([...Object.keys(CommentType).map((key) => Type.Literal(key as keyof typeof CommentType))]);
 
-const formattingEvaluatorConfigurationType = Type.Object({
+export const formattingEvaluatorConfigurationType = Type.Object({
   enabled: Type.Boolean({ default: true }),
   multipliers: Type.Array(
     Type.Object({
@@ -16,5 +16,3 @@ const formattingEvaluatorConfigurationType = Type.Object({
 });
 
 export type FormattingEvaluatorConfiguration = Static<typeof formattingEvaluatorConfigurationType>;
-
-export default formattingEvaluatorConfigurationType;

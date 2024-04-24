@@ -1,13 +1,12 @@
 import { ObjectOptions, Static, StaticDecode, StringOptions, TProperties, Type as T } from "@sinclair/typebox";
 import ms from "ms";
-
 import { ajv } from "../utils";
-import contentEvaluatorConfigurationType from "./configuration/content-evaluator-config";
-import dataPurgeConfigurationType from "./configuration/data-purge-config";
-import formattingEvaluatorConfigurationType from "./configuration/formatting-evaluator-config";
-import githubCommentConfigurationType from "./configuration/github-comment-config";
-import permitGenerationConfigurationType from "./configuration/permit-generation-configuration";
-import userExtractorConfigurationType from "./configuration/user-extractor-config";
+import { contentEvaluatorConfigurationType } from "./configuration/content-evaluator-config";
+import { dataPurgeConfigurationType } from "./configuration/data-purge-config";
+import { formattingEvaluatorConfigurationType } from "./configuration/formatting-evaluator-config";
+import { githubCommentConfigurationType } from "./configuration/github-comment-config";
+import { permitGenerationConfigurationType } from "./configuration/permit-generation-configuration";
+import { userExtractorConfigurationType } from "./configuration/user-extractor-config";
 
 const promotionComment =
   "###### If you enjoy the DevPool experience, please follow [Ubiquity on GitHub](https://github.com/ubiquity) and star [this repo](https://github.com/ubiquity/devpool-directory) to show your support. It helps a lot!";
@@ -44,18 +43,23 @@ export function stringDuration(options?: StringOptions) {
     .Encode((value) => ms(value));
 }
 
-const envConfigSchema = T.Object({
+export const envConfigSchema = T.Object({
   WEBHOOK_PROXY_URL: T.Optional(T.String({ format: "uri" })), // optional for production
   LOG_LEVEL: T.Enum(LogLevel, { default: LogLevel.DEBUG }),
   LOG_RETRY_LIMIT: T.Number({ default: 8 }),
   SUPABASE_URL: T.String({ format: "uri" }),
   SUPABASE_KEY: T.String(),
+  GITHUB_TOKEN: T.String(),
+  X25519_PRIVATE_KEY: T.String(),
+  OPENAI_API_KEY: T.String(),
+  NFT_MINTER_PRIVATE_KEY: T.String(),
+  NFT_CONTRACT_ADDRESS: T.String(),
   PRIVATE_KEY: T.String(),
   APP_ID: T.Number(),
 });
 
 export const validateEnvConfig = ajv.compile(envConfigSchema);
-export type EnvConfig = Static<typeof envConfigSchema>;
+export type EnvConfigType = Static<typeof envConfigSchema>;
 
 const botConfigSchema = strictObject(
   {
