@@ -1,6 +1,6 @@
 {
   "name": "@ubiquibot/configuration",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": false,
   "description": "Configuration helpers for Ubiquibot.",
   "author": "Ubiquity DAO",
