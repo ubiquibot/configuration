@@ -4,7 +4,7 @@ import { BotConfig, generateConfiguration, parseYaml, transformConfig } from "..
 import validConfig from "./__mocks__/test-valid-conf-obj";
 import defaultConfig from "./__mocks__/test-default-conf-obj";
 
-const defaultConfigFilePath = path.join(__dirname, "../.github/ubiquibot-config.yml");
+const defaultConfigFilePath = path.join(__dirname, "../.github/.ubiquibot-config.yml");
 
 describe("Configuration generation", () => {
   test("Parse Yaml file", () => {
