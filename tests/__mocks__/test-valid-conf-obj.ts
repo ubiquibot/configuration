@@ -71,7 +71,7 @@ const validConfig = {
       },
       multipliers: [
         {
-          type: ["ISSUE", "ISSUER", "TASK"],
+          type: ["ISSUE", "ISSUER", "SPECIFICATION"],
           formattingMultiplier: 1,
           wordValue: 0.1,
         },
@@ -96,7 +96,7 @@ const validConfig = {
           wordValue: 0.1,
         },
         {
-          type: ["REVIEW", "ISSUER", "SPECIFICATION"],
+          type: ["REVIEW", "ISSUER", "TASK"],
           formattingMultiplier: 0,
           wordValue: 0,
         },
