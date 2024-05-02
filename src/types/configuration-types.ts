@@ -1,23 +1,18 @@
 import { ObjectOptions, Static, StaticDecode, StringOptions, TProperties, Type as T } from "@sinclair/typebox";
 import ms from "ms";
-
 import { ajv } from "../utils";
-import { validHTMLElements } from "./valid-html-elements";
+import { contentEvaluatorConfigurationType } from "./configuration/content-evaluator-config";
+import { dataPurgeConfigurationType } from "./configuration/data-purge-config";
+import { formattingEvaluatorConfigurationType } from "./configuration/formatting-evaluator-config";
+import { githubCommentConfigurationType } from "./configuration/github-comment-config";
+import { permitGenerationConfigurationType } from "./configuration/permit-generation-configuration";
+import { pluginConfigurationSchema } from "./configuration/plugin-configuration";
+import { userExtractorConfigurationType } from "./configuration/user-extractor-config";
 
 const promotionComment =
   "###### If you enjoy the DevPool experience, please follow [Ubiquity on GitHub](https://github.com/ubiquity) and star [this repo](https://github.com/ubiquity/devpool-directory) to show your support. It helps a lot!";
 const defaultGreetingHeader =
   "Thank you for contributing! Please be sure to set your wallet address before completing your first task so that you can collect your reward.";
-
-const htmlEntities = validHTMLElements.map((value) => T.Literal(value));
-
-const allHtmlElementsSetToZero = validHTMLElements.reduce(
-  (accumulator, current) => {
-    accumulator[current] = 0;
-    return accumulator;
-  },
-  {} as Record<keyof HTMLElementTagNameMap, number>
-);
 
 export enum LogLevel {
   FATAL = "fatal",
@@ -49,18 +44,23 @@ export function stringDuration(options?: StringOptions) {
     .Encode((value) => ms(value));
 }
 
-const envConfigSchema = T.Object({
+export const envConfigSchema = T.Object({
   WEBHOOK_PROXY_URL: T.Optional(T.String({ format: "uri" })), // optional for production
   LOG_LEVEL: T.Enum(LogLevel, { default: LogLevel.DEBUG }),
   LOG_RETRY_LIMIT: T.Number({ default: 8 }),
   SUPABASE_URL: T.String({ format: "uri" }),
   SUPABASE_KEY: T.String(),
+  GITHUB_TOKEN: T.String(),
+  X25519_PRIVATE_KEY: T.String(),
+  OPENAI_API_KEY: T.String(),
+  NFT_MINTER_PRIVATE_KEY: T.String(),
+  NFT_CONTRACT_ADDRESS: T.String(),
   PRIVATE_KEY: T.String(),
   APP_ID: T.Number(),
 });
 
 export const validateEnvConfig = ajv.compile(envConfigSchema);
-export type EnvConfig = Static<typeof envConfigSchema>;
+export type EnvConfigType = Static<typeof envConfigSchema>;
 
 const botConfigSchema = strictObject(
   {
@@ -83,7 +83,6 @@ const botConfigSchema = strictObject(
       }),
       isNftRewardEnabled: T.Boolean({ default: false }),
     }),
-
     timers: strictObject({
       reviewDelayTolerance: stringDuration({ default: "1 day" }),
       taskStaleTimeoutDuration: stringDuration({ default: "4 weeks" }),
@@ -98,16 +97,13 @@ const botConfigSchema = strictObject(
     }),
     disabledCommands: T.Array(T.String(), { default: allCommands }),
     incentives: strictObject({
-      comment: strictObject({
-        elements: T.Record(T.Union(htmlEntities), T.Number({ default: 0 }), { default: allHtmlElementsSetToZero }),
-        totals: strictObject({
-          character: T.Number({ default: 0, minimum: 0 }),
-          word: T.Number({ default: 0, minimum: 0 }),
-          sentence: T.Number({ default: 0, minimum: 0 }),
-          paragraph: T.Number({ default: 0, minimum: 0 }),
-          comment: T.Number({ default: 0, minimum: 0 }),
-        }),
-      }),
+      enabled: T.Boolean({ default: true }),
+      contentEvaluator: contentEvaluatorConfigurationType,
+      userExtractor: userExtractorConfigurationType,
+      dataPurge: dataPurgeConfigurationType,
+      formattingEvaluator: formattingEvaluatorConfigurationType,
+      permitGeneration: permitGenerationConfigurationType,
+      githubComment: githubCommentConfigurationType,
     }),
     labels: strictObject({
       time: T.Array(T.String(), { default: defaultTimeLabels }),
@@ -119,6 +115,7 @@ const botConfigSchema = strictObject(
       registerWalletWithVerification: T.Boolean({ default: false }),
       openAiTokenLimit: T.Number({ default: 100000 }),
     }),
+    plugins: pluginConfigurationSchema,
   },
   { default: undefined } // top level object can't have default!
 );
