@@ -6,6 +6,7 @@ import { dataPurgeConfigurationType } from "./configuration/data-purge-config";
 import { formattingEvaluatorConfigurationType } from "./configuration/formatting-evaluator-config";
 import { githubCommentConfigurationType } from "./configuration/github-comment-config";
 import { permitGenerationConfigurationType } from "./configuration/permit-generation-configuration";
+import { pluginConfigurationSchema } from "./configuration/plugin-configuration";
 import { userExtractorConfigurationType } from "./configuration/user-extractor-config";
 
 const promotionComment =
@@ -114,6 +115,7 @@ const botConfigSchema = strictObject(
       registerWalletWithVerification: T.Boolean({ default: false }),
       openAiTokenLimit: T.Number({ default: 100000 }),
     }),
+    plugins: pluginConfigurationSchema,
   },
   { default: undefined } // top level object can't have default!
 );

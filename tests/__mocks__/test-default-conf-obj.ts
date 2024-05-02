@@ -101,6 +101,21 @@ const defaultConfig = {
       debug: false,
     },
   },
+  plugins: {
+    "issues.closed": [
+      {
+        uses: [
+          {
+            plugin: "ubiquity/conversation-rewards@testing/ubiquibot-v2-testing",
+            type: "github",
+            with: {
+              evmNetworkId: 100,
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export default defaultConfig;
