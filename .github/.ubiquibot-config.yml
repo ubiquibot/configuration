@@ -1,13 +1,3 @@
-price-multiplier: 1.5
-command-settings:
-  - name: start
-    enabled: false
-# newContributorGreeting:
-#  enabled: true
-#  header:  "Thank you for contributing to UbiquiBot! Please be sure to set your wallet address before completing your first bounty so that the automatic payout upon task completion will work for you."
-#  helpMenu: true
-#  footer:  "###### Also please star this repository and [@ubiquity/devpool-directory](https://github.com/ubiquity/devpool-directory/) to show your support. It helps a lot!"
-
 incentives:
   enabled: true
   contentEvaluator:
@@ -77,8 +67,9 @@ incentives:
 
 plugins:
   'issues.closed':
-    - uses:
-        - plugin: ubiquity/conversation-rewards@testing/ubiquibot-v2-testing
-          type: github
-          with:
-            evmNetworkId: 100
+    - skipBotEvents: true
+      uses:
+      - plugin: ubiquibot/conversation-rewards@testing/ubiquibot-v2-testing
+        type: github
+        with:
+          evmNetworkId: 100

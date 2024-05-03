@@ -1,11 +1,4 @@
 const defaultConfig = {
-  "price-multiplier": 1.5,
-  "command-settings": [
-    {
-      name: "start",
-      enabled: false,
-    },
-  ],
   incentives: {
     enabled: true,
     contentEvaluator: {
@@ -104,6 +97,7 @@ const defaultConfig = {
   plugins: {
     "issues.closed": [
       {
+        skipBotEvents: true,
         uses: [
           {
             plugin: "ubiquity/conversation-rewards@testing/ubiquibot-v2-testing",

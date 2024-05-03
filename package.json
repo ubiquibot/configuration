@@ -25,15 +25,15 @@
     "ubiquibot",
     "open-source"
   ],
-  "dependencies": {},
+  "dependencies": {
+  },
   "peerDependencies": {
     "@octokit/webhooks": "12.2.0",
     "@sinclair/typebox": "0.32.23",
-    "ajv": "8.13.0",
-    "ajv-formats": "3.0.1",
     "dotenv": "16.4.5",
     "lodash": "4.17.21",
-    "ms": "2.1.3"
+    "ms": "2.1.3",
+    "typebox-validators": "0.3.5"
   },
   "devDependencies": {
     "@commitlint/cli": "18.6.1",
@@ -55,8 +55,6 @@
     "@types/node": "20.11.19",
     "@typescript-eslint/eslint-plugin": "7.0.1",
     "@typescript-eslint/parser": "7.0.1",
-    "ajv": "8.12.0",
-    "ajv-formats": "3.0.1",
     "cspell": "8.3.2",
     "dotenv": "16.4.5",
     "esbuild": "0.20.0",
@@ -82,6 +80,7 @@
     "ts-jest": "29.1.2",
     "tslib": "2.6.2",
     "tsx": "4.7.1",
+    "typebox-validators": "0.3.5",
     "typescript": "5.3.3"
   },
   "lint-staged": {

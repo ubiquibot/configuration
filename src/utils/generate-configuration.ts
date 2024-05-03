@@ -1,13 +1,15 @@
 import { Value } from "@sinclair/typebox/value";
-import { DefinedError } from "ajv";
 import mergeWith from "lodash/merge";
 import YAML from "yaml";
-import { BotConfig, stringDuration, validateBotConfig } from "../types";
+import { BotConfig, botConfigSchema, stringDuration, validateBotConfig } from "../types";
 // @ts-expect-error gets transformed by rollup
 import orgConfig from "../../.github/.ubiquibot-config.yml";
+import { githubPluginType } from "../types/configuration/plugin-configuration";
 
 export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
-  const merged = mergeWith({}, orgConfig, repoConfig, (objValue: unknown, srcValue: unknown) => {
+  const defaultConfig = Value.Default(botConfigSchema, {}) as BotConfig;
+
+  const merged = mergeWith(defaultConfig, orgConfig, repoConfig, (objValue: unknown, srcValue: unknown) => {
     if (Array.isArray(objValue) && Array.isArray(srcValue)) {
       // if it's string array, concat and remove duplicates
       if (objValue.every((value) => typeof value === "string")) {
@@ -18,12 +20,12 @@ export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
     }
   });
 
-  const isValid = validateBotConfig(merged);
-  if (!isValid) {
-    const errorMessage = getErrorMsg(validateBotConfig.errors as DefinedError[]);
-    if (errorMessage) {
-      throw new Error(`Invalid merged configuration: ${errorMessage}`);
+  if (!validateBotConfig.test(merged)) {
+    const errors = validateBotConfig.errors(merged);
+    for (const error of errors) {
+      console.error(error);
     }
+    throw new Error("Invalid configuration.");
   }
 
   // this will run transform functions
@@ -33,7 +35,6 @@ export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
     console.error(`Could not transform the configuration: ${err}`);
     throw err;
   }
-
   return merged as BotConfig;
 }
 
@@ -74,12 +75,27 @@ export function transformConfig(config: BotConfig) {
       errorMsg += `Invalid taskDisqualifyDuration value: ${decodeError.value}\n`;
     }
   }
+  errorMsg += transformUseReferences(config);
   if (errorMsg) throw new Error(errorMsg);
 }
 
-function getErrorMsg(errors: DefinedError[]) {
-  const errorsWithoutStrict = errors.filter((error) => error.keyword !== "additionalProperties");
-  return errorsWithoutStrict.length === 0 ? null : errorsWithoutStrict.map((error) => error.instancePath.replaceAll("/", ".") + " " + error.message).join("\n");
+function transformUseReferences(config: BotConfig) {
+  let errorMsg = "";
+  try {
+    for (const plugins of Object.values(config.plugins)) {
+      for (const plugin of plugins) {
+        for (const use of plugin.uses) {
+          use.plugin = Value.Decode(githubPluginType(), use.plugin);
+        }
+      }
+    }
+  } catch (err: unknown) {
+    const decodeError = err as DecodeError;
+    if (decodeError.value) {
+      errorMsg += `Invalid plugin use value: ${decodeError.value}\n`;
+    }
+  }
+  return errorMsg;
 }
 
 /**

@@ -1,11 +1,4 @@
 const validConfig = {
-  "price-multiplier": 1.5,
-  "command-settings": [
-    {
-      name: "start",
-      enabled: false,
-    },
-  ],
   keys: {},
   features: {
     assistivePricing: false,
