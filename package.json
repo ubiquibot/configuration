@@ -1,6 +1,6 @@
 {
   "name": "@ubiquibot/configuration",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "private": false,
   "description": "Configuration helpers for Ubiquibot.",
   "author": "Ubiquity DAO",
@@ -25,8 +25,7 @@
     "ubiquibot",
     "open-source"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@octokit/webhooks": "12.2.0",
     "@sinclair/typebox": "0.32.23",
