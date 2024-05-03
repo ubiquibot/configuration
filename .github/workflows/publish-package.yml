@@ -1,10 +1,14 @@
-name: publish-package
+name: Publish Package
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release-please:
@@ -13,7 +17,7 @@ jobs:
       - uses: google-github-actions/release-please-action@v4
         with:
           release-type: node
-          package-name: @ubiquibot/configuration
+          package-name: "@ubiquibot/configuration"
           default-branch: main
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
