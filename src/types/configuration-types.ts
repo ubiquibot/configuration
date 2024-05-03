@@ -1,6 +1,6 @@
 import { ObjectOptions, Static, StaticDecode, StringOptions, TProperties, Type as T } from "@sinclair/typebox";
 import ms from "ms";
-import { ajv } from "../utils";
+import { StandardValidator } from "typebox-validators";
 import { contentEvaluatorConfigurationType } from "./configuration/content-evaluator-config";
 import { dataPurgeConfigurationType } from "./configuration/data-purge-config";
 import { formattingEvaluatorConfigurationType } from "./configuration/formatting-evaluator-config";
@@ -59,10 +59,10 @@ export const envConfigSchema = T.Object({
   APP_ID: T.Number(),
 });
 
-export const validateEnvConfig = ajv.compile(envConfigSchema);
+export const validateEnvConfig = new StandardValidator(envConfigSchema);
 export type EnvConfigType = Static<typeof envConfigSchema>;
 
-const botConfigSchema = strictObject(
+export const botConfigSchema = strictObject(
   {
     keys: strictObject({
       evmPrivateEncrypted: T.Optional(T.String()),
@@ -119,6 +119,6 @@ const botConfigSchema = strictObject(
   },
   { default: undefined } // top level object can't have default!
 );
-export const validateBotConfig = ajv.compile(botConfigSchema);
+export const validateBotConfig = new StandardValidator(botConfigSchema);
 
 export type BotConfig = StaticDecode<typeof botConfigSchema>;
