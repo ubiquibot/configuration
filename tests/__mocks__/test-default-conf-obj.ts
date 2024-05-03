@@ -100,7 +100,7 @@ const defaultConfig = {
         skipBotEvents: true,
         uses: [
           {
-            plugin: "ubiquity/conversation-rewards@testing/ubiquibot-v2-testing",
+            plugin: "ubiquibot/conversation-rewards@testing/ubiquibot-v2-testing",
             type: "github",
             with: {
               evmNetworkId: 100,

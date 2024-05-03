@@ -85,7 +85,10 @@ function transformUseReferences(config: BotConfig) {
     for (const plugins of Object.values(config.plugins)) {
       for (const plugin of plugins) {
         for (const use of plugin.uses) {
-          use.plugin = Value.Decode(githubPluginType(), use.plugin);
+          // This case happens if the object was not transformed before, otherwise the value can be safely be ignored
+          if (typeof use.plugin === "string") {
+            use.plugin = Value.Decode(githubPluginType(), use.plugin);
+          }
         }
       }
     }

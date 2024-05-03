@@ -142,7 +142,12 @@ const validConfig = {
         skipBotEvents: true,
         uses: [
           {
-            plugin: "ubiquity/conversation-rewards@testing/ubiquibot-v2-testing",
+            plugin: {
+              owner: "ubiquibot",
+              ref: "testing/ubiquibot-v2-testing",
+              repo: "conversation-rewards",
+              workflowId: "compute.yml",
+            },
             type: "github",
             with: {
               evmNetworkId: 100,
