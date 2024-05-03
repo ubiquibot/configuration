@@ -28,7 +28,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@octokit/webhooks": "12.2.0",
-    "@sinclair/typebox": "0.32.23",
+    "@sinclair/typebox": "0.32.27",
     "dotenv": "16.4.5",
     "lodash": "4.17.21",
     "ms": "2.1.3",
