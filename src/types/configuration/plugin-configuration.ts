@@ -11,7 +11,7 @@ type GithubPlugin = {
   ref?: string;
 };
 
-function githubPluginType() {
+export function githubPluginType() {
   return T.Transform(T.String())
     .Decode((value) => {
       const matches = value.match(pluginNameRegex);
