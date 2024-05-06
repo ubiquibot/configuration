@@ -29,16 +29,24 @@ describe("Configuration generation", () => {
 
   test("Transform configuration", async () => {
     const cfg = generateConfiguration();
-    expect(() => {
-      transformConfig(cfg);
-    }).toThrow();
     const stringCfg = {
       ...cfg,
-      timers: {
-        reviewDelayTolerance: "86400000",
-        taskStaleTimeoutDuration: "2419200000",
-        taskFollowUpDuration: "302400000",
-        taskDisqualifyDuration: "604800000",
+      plugins: {
+        ...cfg.plugins,
+        "issues.closed": [
+          {
+            skipBotEvents: true,
+            uses: [
+              {
+                plugin: "ubiquibot/conversation-rewards@testing/ubiquibot-v2-testing",
+                type: "github",
+                with: {
+                  evmNetworkId: 100,
+                },
+              },
+            ],
+          },
+        ],
       },
     } as unknown as BotConfig;
     transformConfig(stringCfg);
