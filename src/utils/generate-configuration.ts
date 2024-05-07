@@ -1,9 +1,9 @@
 import { Value } from "@sinclair/typebox/value";
 import mergeWith from "lodash/merge";
 import YAML from "yaml";
-import { BotConfig, botConfigSchema, stringDuration, validateBotConfig } from "../types";
 // @ts-expect-error gets transformed by rollup
 import orgConfig from "../../.github/.ubiquibot-config.yml";
+import { BotConfig, botConfigSchema, validateBotConfig } from "../types";
 import { githubPluginType } from "../types/configuration/plugin-configuration";
 
 export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
@@ -43,38 +43,6 @@ export function generateConfiguration(repoConfig?: BotConfig): BotConfig {
 // That's why we have transform every field manually and catch errors
 export function transformConfig(config: BotConfig) {
   let errorMsg = "";
-  try {
-    config.timers.reviewDelayTolerance = Value.Decode(stringDuration(), config.timers.reviewDelayTolerance);
-  } catch (err: unknown) {
-    const decodeError = err as DecodeError;
-    if (decodeError.value) {
-      errorMsg += `Invalid reviewDelayTolerance value: ${decodeError.value}\n`;
-    }
-  }
-  try {
-    config.timers.taskStaleTimeoutDuration = Value.Decode(stringDuration(), config.timers.taskStaleTimeoutDuration);
-  } catch (err: unknown) {
-    const decodeError = err as DecodeError;
-    if (decodeError.value) {
-      errorMsg += `Invalid taskStaleTimeoutDuration value: ${decodeError.value}\n`;
-    }
-  }
-  try {
-    config.timers.taskFollowUpDuration = Value.Decode(stringDuration(), config.timers.taskFollowUpDuration);
-  } catch (err: unknown) {
-    const decodeError = err as DecodeError;
-    if (decodeError.value) {
-      errorMsg += `Invalid taskFollowUpDuration value: ${decodeError.value}\n`;
-    }
-  }
-  try {
-    config.timers.taskDisqualifyDuration = Value.Decode(stringDuration(), config.timers.taskDisqualifyDuration);
-  } catch (err: unknown) {
-    const decodeError = err as DecodeError;
-    if (decodeError.value) {
-      errorMsg += `Invalid taskDisqualifyDuration value: ${decodeError.value}\n`;
-    }
-  }
   errorMsg += transformUseReferences(config);
   if (errorMsg) throw new Error(errorMsg);
 }
