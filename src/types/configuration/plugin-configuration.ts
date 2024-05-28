@@ -5,28 +5,49 @@ import { githubWebhookEvents } from "./webhook-events";
 const pluginNameRegex = new RegExp("^([0-9a-zA-Z-._]+)\\/([0-9a-zA-Z-._]+)(?::([0-9a-zA-Z-._]+))?(?:@([0-9a-zA-Z-._]+(?:\\/[0-9a-zA-Z-._]+)?))?$");
 
 type GithubPlugin = {
+  type: "github";
   owner: string;
   repo: string;
   workflowId: string;
   ref?: string;
 };
 
-export function githubPluginType() {
+type HttpsPlugin = {
+  type: "https";
+  url: string;
+};
+
+export type Plugin = GithubPlugin | HttpsPlugin;
+
+function githubPluginType() {
   return T.Transform(T.String())
     .Decode((value) => {
+      if (value.startsWith("https://")) {
+        return {
+          type: "https",
+          url: value,
+        } as Plugin;
+      }
       const matches = value.match(pluginNameRegex);
       if (!matches) {
         throw new Error(`Invalid plugin name: ${value}`);
       }
       return {
+        type: "github",
         owner: matches[1],
         repo: matches[2],
         workflowId: matches[3] || "compute.yml",
         ref: matches[4] || undefined,
-      } as GithubPlugin;
+      } as Plugin;
     })
     .Encode((value) => {
-      return `${value.owner}/${value.repo}${value.workflowId ? ":" + value.workflowId : ""}${value.ref ? "@" + value.ref : ""}`;
+      if (value.type === "github") {
+        return `${value.owner}/${value.repo}${value.workflowId ? ":" + value.workflowId : ""}${value.ref ? "@" + value.ref : ""}`;
+      } else if (value.type === "https") {
+        return value.url;
+      } else {
+        throw new Error(`Invalid plugin type`);
+      }
     });
 }
 
@@ -34,7 +55,6 @@ const pluginChainSchema = T.Array(
   T.Object({
     id: T.Optional(T.String()),
     plugin: githubPluginType(),
-    type: T.Union([T.Literal("github")], { default: "github" }),
     with: T.Record(T.String(), T.Unknown()),
   }),
   { minItems: 1 }
